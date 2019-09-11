@@ -1,11 +1,14 @@
 <?php
 require_once "common/utils.php";
 require_once "common/sql.php";
+require_once "common/Login.php";
 
 Utils::init();
 Utils::setContentType("json");
 
-//Utils::canAccess();
+//tils::canAccess();
+$input = json_decode(file_get_contents("php://input"));
+$userId = Login::checkLogin(@$input->apiKey, @$input->token);
 
 $pdo = Sql::$pdo;
 
@@ -62,7 +65,7 @@ else if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	$data = array_values((array)$jsonData);
 	$query = "INSERT INTO contests (name, date, stadiumId, finished) VALUES (?,?,?,?)";
 
-	Utils::validateJSON($jsonData, "contest.php");
+	Utils::validateJSON($jsonData, "contest.json");
 	
 	$data = array_map(function ($v) { return is_bool($v) ? (int) $v : $v; }, $data);
 ;	$pdo->prepare($query)->execute($data);	

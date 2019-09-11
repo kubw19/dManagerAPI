@@ -1,93 +1,63 @@
 <?php
 require_once "common/utils.php";
 require_once "common/sql.php";
+require_once "common/Login.php";
 
 
 Utils::init();
 Utils::setContentType("json");
 
-session_start();
 
-$inputEmpty = true;
-if (!empty(file_get_contents("php://input"))) {
-    $inputEmpty = false;
-    $json = json_decode(file_get_contents("php://input"));
-}
+//Utils::validateJSON($json, "login.json");
 
-if (!$inputEmpty & $json->logout == true) {
-    $loginData = new LoginData();
-    $loginData->logged = false;
-    $loginData->message = "LOGGED_OUT";
-    session_unset();
-    print json_encode($loginData);
+//echo md5("e0395fe4ee984c525ccc86d1ca1329fa" . "68f5f824750be3220a4468f12d046656");
+//die();
+//Login::checkLogin("e0395fe4ee984c525ccc86d1ca1329fa", "084f8487e7f4cba8a6db8c2958931786");
+//die();
+
+$input = json_decode(file_get_contents('php://input'));
+
+if (empty($input)) {
     die();
 }
 
-if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
-    $loginData = new LoginData();
-    $loginData->logged = true;
-    $loginData->login = $_SESSION['login'];
-    $loginData->userId = $_SESSION['userId'];
-    print json_encode($loginData);
-} else if ($inputEmpty) {
-    LoginData::notLogged("PROVIDE_DATA");
-    die();
-} else {
-    Utils::validateJSON($json, "login.json");
+if (isset($input->email) && isset($input->password)) {
+    $users = Sql::getFields("users", ["userId", "password", "login", "type"], [["key" => "email", "value" => $input->email]]);
 
-    $users = Sql::getFields("users", ["userId", "password", "login", "type"], [["key" => "email", "value" => $json->email]]);
-
-    if (count($users) == 0) {
-        LoginData::notLogged("WRONG_EMAIL");
+    if (empty($users)) {
+        Login::notLogged("WRONG_EMAIL");
         die();
     }
 
 
-    if ($users[0]["password"] == $json->password) {
+    if ($users[0]["password"] == $input->password) {
         //logged in correctly!
-        $loginData = new LoginData();
-        $loginData->logged = true;
-        $loginData->login = $query[0]['login'];
-        $loginData->userId = $query[0]['userId'];
-        $loginData->authKey = Utils::getAuthKey();
-        $loginData->apiKey = Utils::getApiKey();
- 
+        $apiKey = Utils::getApiKey();
+        $authKey = Utils::getAuthKey();
+        $expire = Utils::getIntervalDate(15);        
+
+        Sql::updateFields("sessions", [["key" => "expire", "value" => "1970-01-01 00:00:00"]], [["key" => "userId", "value" => $users[0]["userId"]]]);
+       
         Sql::insertFields("sessions", [
-            ["key" => "apiKey", "value" => $loginData->apiKey],
-            ["key" => "authKey", "value" => $loginData->authKey],
-            ["key" => "expire", "value" => Utils::getIntervalDate(15)],
+            ["key" => "apiKey", "value" => $apiKey],
+            ["key" => "authKey", "value" => $authKey],
+            ["key" => "expire", "value" => $expire],
             ["key" => "userId", "value" => $users[0]["userId"]],
             ["key" => "ip", "value" => $_SERVER['REMOTE_ADDR']],
-            ["key" => "creationTime", "value" => Utils::getDate()]          
+            ["key" => "creationTime", "value" => Utils::getDate()]
         ]);
 
-        Sql::updateFields("users", [["key" => lastLogin, "value" => Utils::getDate()]], [["key" => "userId", "value" => $users[0]["userId"]]]);
-
-        print json_encode($loginData);
-
+        Sql::updateFields("users", [["key" => "lastLogin", "value" => Utils::getDate()]], [["key" => "userId", "value" => $users[0]["userId"]]]);
+        Login::logged($apiKey, $authKey, strtotime($expire));
         die();
     } else {
-        LoginData::notLogged("WRONG_PASSWORD");
+        Login::notLogged("WRONG_PASSWORD");
         die();
     }
 }
-
-class LoginData
-{
-    public $logged;
-    public $login;
-    public $userId;
-    public $message;
-    public $apiKey;
-    public $authKey;
-
-    public static function notLogged($message = null)
-    {
-        $loginData = new LoginData();
-        $loginData->logged = false;
-        if ($message != null) {
-            $loginData->message = $message;
-        }
-        print json_encode($loginData);
-    }
+else if(isset($input->apiKey) && isset($input->token)){
+    Login::checkLogin($input->apiKey, $input->token);
+    Login::logged(null, null, null, true);
 }
+
+die();

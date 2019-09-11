@@ -66,11 +66,6 @@ class Utils
         }
     }
 
-    public static function isLogged()
-    {
-        return isset($_SESSION['logged']) && $_SESSION['logged'] == true;
-    }
-
     public static function userType()
     {
         if (!isLogged()) die();
@@ -99,6 +94,7 @@ class Utils
 
     public static function getIntervalDate($minutes = 15)
     {
+        date_default_timezone_set("UTC");
         $date = new DateTime();
         $date->add(new DateInterval('PT' . $minutes . 'M')); // PT15M means a period of 15 minutes
         $date = $date->format('Y-m-d H:i:s');
@@ -107,6 +103,7 @@ class Utils
 
     public static function getDate()
     {
+        date_default_timezone_set("UTC");
         $date = new DateTime();
         $date = $date->format('Y-m-d H:i:s');
         return $date;
