@@ -1,11 +1,15 @@
 <?php
 require_once "common/utils.php";
 require_once "common/sql.php";
+require_once "common/Login.php";
 
 Utils::init();
 Utils::setContentType("json");
 
-//Utils::canAccess();
+$userId = null;
+Login::checkLogin($userId);
+Login::canAccess();
+$pdo = Sql::$pdo;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["delete"] == "false")) {
 

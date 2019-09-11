@@ -66,23 +66,6 @@ class Utils
         }
     }
 
-    public static function userType()
-    {
-        if (!isLogged()) die();
-        return $_SESSION["type"];
-    }
-
-    public static function canAccess($type = "PAGE")
-    {
-        if (Utils::userType() == 0) return true;
-        return false; // remove this
-        switch ($type) {
-            case "PAGE":
-                $page = basename($_SERVER["SCRIPT_NAME"], ".php");
-                break;
-        }
-    }
-
     public static function getApiKey()
     {
         return md5("kalafior12398@?" . $_SERVER['SERVER_ADDR'] . rand() . time());

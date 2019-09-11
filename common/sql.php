@@ -50,7 +50,7 @@ class Sql
          if ($i > 0) {
             $query .= " AND ";
          }
-         $query .= $wheres[$i]["key"] . " = :p" . ($i + 1);
+         $query .= $wheres[$i]["key"] . " " . (isset($wheres[$i]["operator"]) ? $wheres[$i]["operator"] : "=") . " :p" . ($i + 1);
       }
 
 
@@ -104,7 +104,7 @@ class Sql
             if ($i > 0) {
                $query .= " AND ";
             }
-            $query .= $wheres[$i]["key"] . " = :p" . ($i + 1);
+            $query .= $wheres[$i]["key"] . " " . (isset($wheres[$i]["operator"]) ? $wheres[$i]["operator"] : "=") . " :p" . ($i + 1);
          }
       }
 
@@ -128,7 +128,7 @@ class Sql
             if ($i > 0) {
                $query .= " AND ";
             }
-            $query .= $wheres[$i]["key"] . " = :p" . ($i + 1);
+            $query .= $wheres[$i]["key"] . " " . (isset($wheres[$i]["operator"]) ? $wheres[$i]["operator"] : "=") . " :p" . ($i + 1);
          }
       }
 

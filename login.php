@@ -30,14 +30,14 @@ if (isset($input->email) && isset($input->password)) {
     }
 
 
-    if ($users[0]["password"] == $input->password) {
+    if ($users[0]["password"] == md5($input->password)) {
         //logged in correctly!
         $apiKey = Utils::getApiKey();
         $authKey = Utils::getAuthKey();
-        $expire = Utils::getIntervalDate(15);        
+        $expire = Utils::getIntervalDate(15);
 
-        Sql::updateFields("sessions", [["key" => "expire", "value" => "1970-01-01 00:00:00"]], [["key" => "userId", "value" => $users[0]["userId"]]]);
-       
+        Sql::updateFields("sessions", [["key" => "expire", "value" => Utils::getDate()]], [["key" => "userId", "value" => $users[0]["userId"]], ["key" => "expire", "value" => Utils::getDate(), "operator" => ">="]]);
+
         Sql::insertFields("sessions", [
             ["key" => "apiKey", "value" => $apiKey],
             ["key" => "authKey", "value" => $authKey],
@@ -54,9 +54,8 @@ if (isset($input->email) && isset($input->password)) {
         Login::notLogged("WRONG_PASSWORD");
         die();
     }
-}
-else if(isset($input->apiKey) && isset($input->token)){
-    Login::checkLogin($input->apiKey, $input->token);
+} else if (isset($input->apiKey) && isset($input->token)) {
+    Login::checkLogin();
     Login::logged(null, null, null, true);
 }
 

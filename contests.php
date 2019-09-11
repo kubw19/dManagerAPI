@@ -6,10 +6,9 @@ require_once "common/Login.php";
 Utils::init();
 Utils::setContentType("json");
 
-//tils::canAccess();
-$input = json_decode(file_get_contents("php://input"));
-$userId = Login::checkLogin(@$input->apiKey, @$input->token);
-
+$userId = null;
+Login::checkLogin($userId);
+Login::canAccess();
 $pdo = Sql::$pdo;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["delete"] == "false")) {
@@ -44,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		$contests = $contests->fetchAll(PDO::FETCH_ASSOC);
 
 	}
-
+	$contestList = [];
 	foreach($contests as $contest){
 		$shootKings = $pdo->prepare("Select sk.playerId, sk.name, sk.surname, sk.country, sk.goals from shootKings sk where contestId = :p1");
 		$shootKings ->bindParam(':p1', $contest["contestId"]);
@@ -56,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 	}
 
 	$json = json_encode($contestList);
-
 	print $json;
 }
 
