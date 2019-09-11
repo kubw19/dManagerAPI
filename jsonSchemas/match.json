@@ -1,0 +1,22 @@
+{
+    "title": "Match",
+    "type": "object",
+    "properties": {
+        "team1": {
+            "type": "integer",
+			"minLength": 1
+        },
+        "team2": {
+            "type": "integer",
+			"minLength": 1
+        },
+		"groupId": {
+            "type": "integer",
+			"minLength": 1
+        },
+		"played": {
+            "type": "boolean"
+        }
+    },
+    "required": ["team1", "team2", "groupId", "played"]
+}
