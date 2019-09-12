@@ -18,6 +18,7 @@ Utils::setContentType("json");
 $input = json_decode(file_get_contents('php://input'));
 
 if (empty($input)) {
+    Login::notLogged("INCORRECT_DATA");
     die();
 }
 
@@ -57,6 +58,7 @@ if (isset($input->email) && isset($input->password)) {
 } else if (isset($input->apiKey) && isset($input->token)) {
     Login::checkLogin();
     Login::logged(null, null, null, true);
+    die();
 }
-
+Login::notLogged("INCORRECT_DATA");
 die();

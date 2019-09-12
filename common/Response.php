@@ -1,37 +1,50 @@
 <?php
-class Response{
+class Response
+{
     public $message;
     public $details;
-    public static function sendResponse($type, $details = null){
+    public static function sendResponse($type, $details = null)
+    {
         $response = new Response();
-        switch($type){
+        switch ($type) {
             case "NOT_FOUND":
                 //header("Status: 304");                
                 $response->message = "Not found";
-            break;
+                break;
             case "SUCCESS":
                 //header("Status: 304");
                 $response->message = "Success";
-            break;
+                break;
             case "EMPTY":
                 //header("Status: 304");
                 $response->message = "Empty";
-            break;
+                break;
             case "NOT_ALLOWED":
                 header("Status: 405");
                 $response->message = "Method not allowed";
-            break;
+                break;
             case "INCORRECT_DATA":
-                header("Status: 200");
+                Response::setHttpCode(406);
                 $response->message = "Incorrect data";
-            break;
+                break;
             case "OK":
                 header("Status: 200");
                 $response->message = "OK";
-            break;
+                break;
+            case "UNAUTHORIZED":
+                Response::setHttpCode(401);
+                $response->message = "UNAUTHORIZED";
+                break;
         }
         $response->details = $details;
         print_r(json_encode($response));
     }
+
+    public static function setHttpCode($code)
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] != "OPTIONS") {
+            http_response_code($code);
+        }
+    }
 }
-?>

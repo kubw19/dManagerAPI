@@ -41,10 +41,9 @@ class Utils
     private static function showHeaders()
     {
         header("Expires: Thu, 19 Nov 1981 08:52:00 GMT");
-        header("Access-Control-Allow-Headers: Content-Type");
 
         header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin, X-PINGOTHER");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
         header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");

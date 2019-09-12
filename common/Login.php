@@ -18,6 +18,7 @@ class Login
 
     public static function notLogged($message = null)
     {
+        Response::setHttpCode(401);
         $loginData = new Login(false, null, null, null, $message);
         print json_encode($loginData);
     }
