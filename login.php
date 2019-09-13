@@ -14,17 +14,11 @@ Utils::setContentType("json");
 //die();
 //Login::checkLogin("e0395fe4ee984c525ccc86d1ca1329fa", "084f8487e7f4cba8a6db8c2958931786");
 //die();
-
-$input = json_decode(file_get_contents('php://input'));
-
-if (empty($input)) {
-    Login::notLogged("INCORRECT_DATA");
-    die();
-}
+//file_put_contents("plik.txt", file_get_contents("php://input"));
+$input = json_decode(file_get_contents("php://input"));
 
 if (isset($input->email) && isset($input->password)) {
     $users = Sql::getFields("users", ["userId", "password", "login", "type"], [["key" => "email", "value" => $input->email]]);
-
     if (empty($users)) {
         Login::notLogged("WRONG_EMAIL");
         die();
@@ -55,10 +49,6 @@ if (isset($input->email) && isset($input->password)) {
         Login::notLogged("WRONG_PASSWORD");
         die();
     }
-} else if (isset($input->apiKey) && isset($input->token)) {
+} else {
     Login::checkLogin();
-    Login::logged(null, null, null, true);
-    die();
 }
-Login::notLogged("INCORRECT_DATA");
-die();

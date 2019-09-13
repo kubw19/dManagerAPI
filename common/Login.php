@@ -31,13 +31,13 @@ class Login
 
     public static function checkLogin(&$userId = null)
     {
-        $input = json_decode(file_get_contents("php://input"));
-        if (!isset($input->apiKey) || !isset($input->token)) {
+        if (!isset($_SERVER["HTTP_APIKEY"]) || !isset($_SERVER["HTTP_TOKEN"])) {
+            Login::notLogged("INCORRECT_DATA");
             die();
         };
 
-        $apiKey = $input->apiKey;
-        $token = $input->token;
+        $apiKey = $_SERVER["HTTP_APIKEY"];
+        $token = $_SERVER["HTTP_TOKEN"];
 
         $fields = Sql::getFields("sessions", ["authKey", "expire", "userId"], [["key" => "apiKey", "value" => $apiKey]]);
 
@@ -56,16 +56,17 @@ class Login
         }
 
         if ($userId != null) $userId = $fields[0]["userId"];
+        Login::logged(null, null, null, true);
+        die();
     }
 
     public static function userType()
     {
-        $input = json_decode(file_get_contents("php://input"));
-        if (!isset($input->apiKey)) {
+        if (!isset($_SERVER["HTTP_APIKEY"])) {
             die();
         };
 
-        $result = Sql::getFields("sessions", ["userId"], [["key" => "apiKey", "value" => $input->apiKey]]);
+        $result = Sql::getFields("sessions", ["userId"], [["key" => "apiKey", "value" => $_SERVER["HTTP_APIKEY"]]]);
         $userId = $result[0]["userId"];
         $result = Sql::getFields("users", ["type"], [["key" => "userId", "value" => $userId]]);
         if (empty($result)) die();
