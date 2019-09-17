@@ -32,7 +32,7 @@ class Response
                 $response->message = "OK";
                 break;
             case "UNAUTHORIZED":
-                Response::setHttpCode(401);
+                //Response::setHttpCode(401);
                 $response->message = "UNAUTHORIZED";
                 break;
         }

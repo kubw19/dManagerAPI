@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 
 	//if(count($groups) == 0)Response::sendResponse("EMPTY");
 
+	$groupList = [];
 	foreach($groups as $group){
 		$team = Sql::$pdo->prepare("SELECT * from groupData WHERE groupId=:p1");
 		$team ->bindParam(':p1', $group["groupId"]);
@@ -65,6 +66,8 @@ else if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	$query = "INSERT INTO groups (name, phaseId) VALUES (?,?)";
 	$add = Sql::$pdo->prepare($query);
 	$add->execute($parameters);
+	
+	Response::sendResponse("OK");
 }
 
 else if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["delete"]) && $_GET["delete"] == "true"){

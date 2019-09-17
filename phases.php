@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		$phases = $phases->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	$phaseList = [];
+
 	foreach($phases as $phase){
 		if($phase["groupPhase"] == 0){
 			$query = "SELECT groupId FROM groups WHERE phaseId=:p1";
@@ -75,6 +77,7 @@ else if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		$add->bindParam(':p1', $id);
 		$add->execute();
 	}
+	Response::sendResponse("OK");
 }
 
 else if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["delete"]) && $_GET["delete"] == "true"){

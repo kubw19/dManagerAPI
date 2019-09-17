@@ -66,7 +66,9 @@ else if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	Utils::validateJSON($jsonData, "contest.json");
 	
 	$data = array_map(function ($v) { return is_bool($v) ? (int) $v : $v; }, $data);
-;	$pdo->prepare($query)->execute($data);	
+	$pdo->prepare($query)->execute($data);	
+
+	Response::sendResponse("OK");
 }
 
 else if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["delete"]) && $_GET["delete"] == "true"){	

@@ -29,7 +29,7 @@ class Login
         print json_encode($loginData);
     }
 
-    public static function checkLogin(&$userId = null)
+    public static function checkLogin(&$userId = null, $print = false)
     {
         if (!isset($_SERVER["HTTP_APIKEY"]) || !isset($_SERVER["HTTP_TOKEN"])) {
             Login::notLogged("INCORRECT_DATA");
@@ -56,8 +56,10 @@ class Login
         }
 
         if ($userId != null) $userId = $fields[0]["userId"];
-        Login::logged(null, null, null, true);
-        die();
+        if ($print == true) {
+            Login::logged(null, null, null, true);
+            die();
+        }
     }
 
     public static function userType()
