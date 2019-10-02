@@ -50,6 +50,6 @@ if (isset($input->email) && isset($input->password)) {
         die();
     }
 } else {
-    $userId = null;
+    $userId = -1;
     Login::checkLogin($userId, true);
 }

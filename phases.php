@@ -6,7 +6,7 @@ require_once "common/Login.php";
 Utils::init();
 Utils::setContentType("json");
 
-$userId = null;
+$userId = -1;
 Login::checkLogin($userId);
 Login::canAccess();
 $pdo = Sql::$pdo;
