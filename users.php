@@ -13,20 +13,9 @@ $pdo = Sql::$pdo;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-	if(isset($_GET["contestId"])){
-		$query = "SELECT hp.contestId, c.countryId, hp.humanPlayerId, u.userId, c.name as country, u.login FROM countries c JOIN humanPlayers hp on hp.countryId=c.countryId JOIN users u ON hp.userId=u.userId WHERE hp.contestId = :p1";
-		$countries = $pdo->prepare($query);
-		$countries -> bindParam(":p1", $_GET["contestId"]);
-	}
-	else{
-		$query = "SELECT * FROM countries";
-		$countries = $pdo->prepare($query);
-	}
+	$users = sql::getFields("users", ["userId", "login"], []);
 
-	$countries->execute();
-	$countries = $countries->fetchAll(PDO::FETCH_ASSOC);
-
-	$json = json_encode($countries);
+	$json = json_encode($users);
 
 	print $json;
 }
@@ -45,6 +34,5 @@ else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
 
 else if($_SERVER['REQUEST_METHOD'] === 'PUT'){
 	$json = json_decode(file_get_contents('php://input'));
-	//do zrobienia
 	Response::sendResponse("NOT_ALLOWED");
 }

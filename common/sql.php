@@ -44,15 +44,17 @@ class Sql
             $i++;
          }
       }
-      $query .= " FROM " . $table . " WHERE ";
+      $query .= " FROM " . $table;
 
-      for ($i = 0; $i < count($wheres); $i++) {
-         if ($i > 0) {
-            $query .= " AND ";
+      if (count($wheres) > 0) {
+         $query .= " WHERE ";
+         for ($i = 0; $i < count($wheres); $i++) {
+            if ($i > 0) {
+               $query .= " AND ";
+            }
+            $query .= $wheres[$i]["key"] . " " . (isset($wheres[$i]["operator"]) ? $wheres[$i]["operator"] : "=") . " :p" . ($i + 1);
          }
-         $query .= $wheres[$i]["key"] . " " . (isset($wheres[$i]["operator"]) ? $wheres[$i]["operator"] : "=") . " :p" . ($i + 1);
       }
-
 
       $p = Sql::$pdo->prepare($query);
       for ($i = 0; $i < count($wheres); $i++) {

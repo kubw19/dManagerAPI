@@ -35,6 +35,7 @@ class Response
                 //Response::setHttpCode(401);
                 $response->message = "UNAUTHORIZED";
                 break;
+			
         }
         $response->details = $details;
         print_r(json_encode($response));

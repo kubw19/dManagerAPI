@@ -65,70 +65,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		//goals
 			$query = "SELECT * FROM goals where matchId=:p1 and countryId=:p2";
 			$goals = $pdo->prepare($query);
-			$goals ->bindParam(':p1', $match["matchId"]);
-			$goals ->bindParam(':p2', $match["c1Id"]);
+			$goals ->bindParam(':p1', $match["matchid"]);
+			$goals ->bindParam(':p2', $match["c1id"]);
 			$goals->execute();
 			$goals = $goals->fetchAll(PDO::FETCH_ASSOC);
-			$match["goalsT1"] = $goals;
+			$match["goalst1"] = $goals;
 
 			$query = "SELECT * FROM goals where matchId=:p1 and countryId=:p2";
 			$goals = $pdo->prepare($query);
-			$goals ->bindParam(':p1', $match["matchId"]);
-			$goals ->bindParam(':p2', $match["c2Id"]);
+			$goals ->bindParam(':p1', $match["matchid"]);
+			$goals ->bindParam(':p2', $match["c2id"]);
 			$goals->execute();
 			$goals = $goals->fetchAll(PDO::FETCH_ASSOC);
-			$match["goalsT2"] = $goals;
+			$match["goalst2"] = $goals;
 
 		//injuries
 			$query = "SELECT * FROM injuries where matchId=:p1 and countryId=:p2";
 			$injuries = $pdo->prepare($query);
-			$injuries ->bindParam(':p1', $match["matchId"]);
-			$injuries ->bindParam(':p2', $match["c1Id"]);
+			$injuries ->bindParam(':p1', $match["matchid"]);
+			$injuries ->bindParam(':p2', $match["c1id"]);
 			$injuries->execute();
 			$injuries = $injuries->fetchAll(PDO::FETCH_ASSOC);
-			$match["injuriesT1"] = $injuries;
+			$match["injuriest1"] = $injuries;
 
 			$query = "SELECT * FROM injuries where matchId=:p1 and countryId=:p2";
 			$injuries = $pdo->prepare($query);
-			$injuries ->bindParam(':p1', $match["matchId"]);
-			$injuries ->bindParam(':p2', $match["c2Id"]);
+			$injuries ->bindParam(':p1', $match["matchid"]);
+			$injuries ->bindParam(':p2', $match["c2id"]);
 			$injuries->execute();
 			$injuries = $injuries->fetchAll(PDO::FETCH_ASSOC);
-			$match["injuriesT2"] = $injuries;
+			$match["injuriest2"] = $injuries;
 
 		//red cards
 			$query = "SELECT * FROM reds where matchId=:p1 and countryId=:p2";
 			$reds = $pdo->prepare($query);
-			$reds ->bindParam(':p1', $match["matchId"]);
-			$reds ->bindParam(':p2', $match["c1Id"]);
+			$reds ->bindParam(':p1', $match["matchid"]);
+			$reds ->bindParam(':p2', $match["c1id"]);
 			$reds->execute();
 			$reds = $reds->fetchAll(PDO::FETCH_ASSOC);
-			$match["redsT1"] = $reds;
+			$match["redst1"] = $reds;
 
 			$query = "SELECT * FROM reds where matchId=:p1 and countryId=:p2";
 			$reds = $pdo->prepare($query);
-			$reds ->bindParam(':p1', $match["matchId"]);
-			$reds ->bindParam(':p2', $match["c2Id"]);
+			$reds ->bindParam(':p1', $match["matchid"]);
+			$reds ->bindParam(':p2', $match["c2id"]);
 			$reds->execute();
 			$reds = $reds->fetchAll(PDO::FETCH_ASSOC);
-			$match["redsT2"] = $reds;
+			$match["redst2"] = $reds;
 			
 		//yellow cards
 			$query = "SELECT * FROM yellows where matchId=:p1 and countryId=:p2";
 			$yellows = $pdo->prepare($query);
-			$yellows ->bindParam(':p1', $match["matchId"]);
-			$yellows ->bindParam(':p2', $match["c1Id"]);
+			$yellows ->bindParam(':p1', $match["matchid"]);
+			$yellows ->bindParam(':p2', $match["c1id"]);
 			$yellows->execute();
 			$yellows = $yellows->fetchAll(PDO::FETCH_ASSOC);
-			$match["yellowsT1"] = $yellows;
+			$match["yellowst1"] = $yellows;
 
 			$query = "SELECT * FROM yellows where matchId=:p1 and countryId=:p2";
 			$yellows = $pdo->prepare($query);
-			$yellows ->bindParam(':p1', $match["matchId"]);
-			$yellows ->bindParam(':p2', $match["c2Id"]);
+			$yellows ->bindParam(':p1', $match["matchid"]);
+			$yellows ->bindParam(':p2', $match["c2id"]);
 			$yellows->execute();
 			$yellows = $yellows->fetchAll(PDO::FETCH_ASSOC);
-			$match["yellowsT2"] = $yellows;			
+			$match["yellowst2"] = $yellows;			
 
 		$matchList[] = $match;
 	}

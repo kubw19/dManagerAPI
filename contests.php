@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 	if(isset($_GET["id"])){
 		$contestId = $_GET["id"];
 		$query = "  
-						SELECT contests.contestId, contests.name as contestName, contests.finished, contests.date, 
+						SELECT (SELECT count(*) from matchesTable where contestId = contests.contestId) matchesCount,contests.contestId, contests.name as contestName, contests.finished, contests.date, 
 						s.name as stadiumName, s.icon as stadiumIcon FROM contests 
 						JOIN stadiums s on s.stadiumId=contests.stadiumId
 						WHERE contests.contestId = :p1
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 	else{
 
 		$query = "  
-					SELECT contests.contestId, contests.name as contestName, contests.finished, contests.date, 
+					SELECT (SELECT count(*) from matchesTable where contestId = contests.contestId) matchesCount, contests.contestId, contests.name as contestName, contests.finished, contests.date, 
 					s.name as stadiumName, s.icon as stadiumIcon FROM contests 
 					JOIN stadiums s on s.stadiumId=contests.stadiumId
 					ORDER BY contests.date DESC
