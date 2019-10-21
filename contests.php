@@ -6,7 +6,7 @@ require_once "common/Login.php";
 Utils::init();
 Utils::setContentType("json");
 
-$userId = -1;
+$userId = 1;
 Login::checkLogin($userId);
 Login::canAccess();
 $pdo = Sql::$pdo;
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		$contests->execute();
 		$contests = $contests->fetchAll(PDO::FETCH_ASSOC);
 	} else {
-		file_put_contents("asdasd.txt", $userId);
+		//file_put_contents("asdasd.txt", $userId);
 		$query = "  
 					SELECT (SELECT count(*) from matchesTable where contestId = contests.contestId) matchesCount, contests.contestId, contests.name as contestName, contests.finished, contests.date, 
 					s.name as stadiumName, s.icon as stadiumIcon FROM contests 
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		$shootKings = $shootKings->fetchAll(PDO::FETCH_ASSOC);
 		if (count($shootKings) != 1) $shootKings = NULL;
 		$contest["shootKing"] = $shootKings;
-		$contest["users"] = sql::getFields("contestsUsersView", ["contestsUsersId", "login", "lastName"], [["key" => "contestId", "value" => $contest["contestId"]], ["key" => "relation", "value" => 0]]);
+		$contest["users"] = sql::getFields("contestsUsersView", ["contestsUsersId", "login", "firstName", "lastName", "contestsRole"], [["key" => "contestId", "value" => $contest["contestId"]]]);
 		$contestList[] = $contest;
 	}
 
@@ -90,9 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 		return is_bool($v) ? (int) $v : $v;
 	}, $data);
 	$pdo->prepare($query)->execute($data);
-	sql::insertFields("contestsUsers", [["key" => "contestId", "value" => $pdo->lastInsertId()], ["key" => "userId", "value" => $userId], ["key" => "relation", "value" => 0]]);
 
+	
+	sql::insertFields("contestsUsers", [["key" => "contestId", "value" => $pdo->lastInsertId()], ["key" => "userId", "value" => $userId], ["key" => "contestsRole", "value" => 0]]);
 	Response::sendResponse("OK");
+
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET["delete"]) && $_GET["delete"] == "true") {
 	$query = "DELETE FROM contests where contestId = ?";
 

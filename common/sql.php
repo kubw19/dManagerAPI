@@ -1,15 +1,15 @@
 <?php
 require_once(__DIR__ . '/config.php');
 
-new Sql($dbHost, $dbUser, $dbPass);
+new Sql($dbHost, $dbUser, $dbPass, $dbName);
 
 class Sql
 {
    public static $pdo;
-   public function __construct($host, $user, $pass)
+   public function __construct($host, $user, $pass, $dbName)
    {
       try {
-         Sql::$pdo = new PDO('mysql:host=' . $host . ';dbname=dManagerNewDB;charset=utf8', $user, $pass);
+         Sql::$pdo = new PDO('mysql:host=' . $host . ';dbname='.$dbName.';charset=utf8', $user, $pass);
       } catch (PDOException $e) {
          echo 'Cant connect to database: ' . $e->getMessage();
       }
@@ -93,12 +93,17 @@ class Sql
       for ($i = 0; $i < count($fieldsToInsert); $i++) {
          $p->bindParam(':p' . ($i + 1), $fieldsToInsert[$i]["value"]);
       }
-      return $p->execute();
+      $exec = $p->execute();
+      if (!$exec) {
+         return $exec;
+      } else {
+         return Sql::$pdo->lastInsertId();
+      }
    }
 
    public static function updateFields($table, $fieldToUpdate, $wheres)
    {
-      $query = "UPDATE " . $table . " SET " . $fieldToUpdate[0]["key"] . " = :p0";
+      $query = "UPDATE " . $table . " SET " . $fieldToUpdate[0]["key"] . "=:p0 ";
 
       if (!empty($wheres)) {
          $query .= " WHERE ";

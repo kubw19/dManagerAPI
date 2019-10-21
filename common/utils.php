@@ -80,7 +80,7 @@ class Utils
         $date = new DateTime();
         $date->add(new DateInterval('PT' . $minutes . 'M')); // PT15M means a period of 15 minutes
         $date = $date->format('Y-m-d H:i:s');
-        return $date;
+        return strval($date);
     }
 
     public static function getDate()
@@ -88,6 +88,11 @@ class Utils
         date_default_timezone_set("UTC");
         $date = new DateTime();
         $date = $date->format('Y-m-d H:i:s');
-        return $date;
+        return strval($date);
+    }
+
+    public static function addToDateMinutes($date, $minutes){
+        $time = date("Y-m-d H:i:s", strtotime("+" . $minutes . " minutes", strtotime($date)));
+        return strval($time);
     }
 }

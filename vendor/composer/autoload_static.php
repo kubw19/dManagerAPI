@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit02aab7b3ba6ab0d4df00b4866767ffbf
 {
     public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
         'J' => 
         array (
             'JsonSchema\\' => 11,
@@ -14,6 +18,10 @@ class ComposerStaticInit02aab7b3ba6ab0d4df00b4866767ffbf
     );
 
     public static $prefixDirsPsr4 = array (
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
         'JsonSchema\\' => 
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
