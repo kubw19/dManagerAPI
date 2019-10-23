@@ -20,7 +20,7 @@ class Response
                 $response->message = "Empty";
                 break;
             case "NOT_ALLOWED":
-                header("Status: 405");
+                Response::setHttpCode(405);
                 $response->message = "Method not allowed";
                 break;
             case "INCORRECT_DATA":
