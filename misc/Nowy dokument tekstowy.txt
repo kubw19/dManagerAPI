@@ -1,1 +1,0 @@
-dodać zabezpieczenie przed zmianą uczestników turnieju na backendzie

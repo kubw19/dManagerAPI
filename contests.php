@@ -107,6 +107,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET["delete"]) || $_GET["d
 	}
 	Response::sendResponse("OK");
 } else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-	$json = json_decode(file_get_contents('php://input'));
-	//do zrobienia
+	$jsonData = json_decode(file_get_contents("php://input"));	
+
+	if(isset($jsonData->played)){
+		$parameters = array_values(array_map(function ($v) { return is_bool($v) ? (int) $v : $v; }, (array)$jsonData));
+		$query = "UPDATE contests SET finished=? WHERE contestId=?";
+		$add = $pdo->prepare($query);
+		$add->execute($parameters);
+	}
+	Response::sendResponse("SUCCESS");
 }
